@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unordered_set>
 
 using namespace std;
 
@@ -204,17 +205,98 @@ class LinkedList {
                 return slow;                
             }
 
+            bool hasLoop(){
+                Node* fast = head;
+                Node* slow = head;
+                while(fast!= nullptr && fast->next != nullptr){
+                    fast = fast->next->next;
+                    slow = slow->next;
+                    if (fast == slow){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            Node* findKthFromEnd(int k) {
+                Node* slow = head;
+                Node* fast = head;
+                for (int i = 0; i < k; ++i) {
+                    if (fast == nullptr) {
+                        return nullptr;
+                    }
+                    fast = fast->next;
+                }
+                while (fast != nullptr) {
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow;
+            }
+
+            void partitionList(int x){
+                if (head == nullptr) return;
+
+                Node dummy1(0);
+                Node dummy2(0);
+
+                Node* prev1 = &dummy1;
+                Node* prev2 = &dummy2;
+
+                Node* current = head;
+
+                while (current != nullptr){
+                    if (current->value < x){
+                        prev1->next  = current;
+                        prev1 = current;
+                    }else{
+                        prev2->next = current;
+                        prev2 = current;
+                    }
+                    current = current->next;
+                }
+                prev2->next = nullptr;
+                // connect both the dummy nodes
+                prev1->next = dummy2.next;
+                head = dummy1.next;
+
+            }
+
+            void removeDupplicates(){
+                unordered_set<int> values;
+
+                Node* current = head;
+                Node* prev = nullptr;
+
+                while (current != nullptr){
+                    if (values.find(current->value) != values.end()){
+                        prev->next = current->next;
+                        delete current;
+                        current = prev->next;
+                        length -= 1;                        
+                    }else{
+                        values.insert(current->value);
+                        prev = current;
+                        current = current->next;
+                    }
+                }
+
+            }
+
     };
 
 int main() {
-    LinkedList* myLinkedList = new LinkedList(0);
-    myLinkedList->append(1);        
-    myLinkedList->append(2);
+    LinkedList* myLinkedList = new LinkedList(1);
+    myLinkedList->append(2);        
     myLinkedList->append(3);
-    myLinkedList->append(4);
+    myLinkedList->append(1);
+    myLinkedList->append(2);
+    myLinkedList->append(1);
     cout<<"The list"<<endl;
     myLinkedList->printList();
-    cout<<"The middle node is"<<endl;
-    cout<<myLinkedList->findMiddleNode()->value<<endl;
+    myLinkedList->removeDupplicates();
+    cout<<"After removing duplicationsss::"<<endl;
+    myLinkedList->printList();
+
+
 
 }
