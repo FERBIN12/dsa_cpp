@@ -120,7 +120,41 @@ class DoublyLinkedList {
         return temp;
     }
 
+    // set fn to set the value in a particular index
 
+    bool set(int index, int value){
+        Node* temp = get(index);
+
+        if (temp){
+            temp->value = value;
+            return true;
+          
+        }
+        return false;
+        
+    }
+
+    bool insert(int index, int value) {
+        if (index < 0 || index > length) return false;
+        if (index == 0) {
+            prepend(value);
+            return true;
+        } 
+        if (index == length) {
+            append(value);
+            return true;
+        } 
+    
+        Node* newNode = new Node(value);
+        Node* before = get(index - 1);
+        Node* after = before->next;
+        newNode->prev = before;
+        newNode->next = after;
+        before->next = newNode;
+        after->prev = newNode;
+        length++;
+        return true;
+    }
     
 
 };
@@ -132,9 +166,11 @@ int main(){
     myDLL->append(3);
     myDLL->append(4) ;
     myDLL->append(5);
-    cout<<"before del final elememnt"<<endl;
+    cout<<"Input DLL"<<endl;
     myDLL->printList();
-    cout<<"after alteration"<<endl;
-    cout<<myDLL->get(1)->value<<endl;
+    myDLL->insert(0,100);
+    cout<<"After setiing 1 to 1"<<endl;
+    myDLL->printList();
+ 
 
 }
