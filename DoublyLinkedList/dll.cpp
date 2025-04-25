@@ -35,6 +35,18 @@ class DoublyLinkedList {
             temp = temp->next;
         }
     }
+    Node* getHead() {
+        return head;
+    }
+
+    Node* getTail() {
+        return tail; 
+    }
+
+    int getLength() {
+        return length;
+    }
+    
 
     void append(int value){
     
@@ -167,6 +179,19 @@ class DoublyLinkedList {
         delete temp;
         length --;
     }
+    void reverse(){
+
+        Node* t1 = head;
+        Node* t2 = tail;
+        while(t1->next != nullptr){
+            head = tail;
+            tail = tail->prev;
+            delete t2;
+            
+
+        }
+
+    }
 
 };
 
@@ -179,9 +204,10 @@ int main(){
     myDLL->append(5);
     cout<<"Input DLL"<<endl;
     myDLL->printList();
-    myDLL->deleteNode(3);
+    myDLL->reverse();
     cout<<"After deleting node"<<endl;
     myDLL->printList();
+
  
 
 }
